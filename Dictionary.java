@@ -4,11 +4,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
-public class Dictionary {
+class Dictionary {
     private List<String> words;
     private Random random;
 
-    public Dictionary() throws IOException {
+    Dictionary() throws IOException {
         words = Files.readAllLines(Paths.get("dictionary.txt"));
         random = new Random();
     }
