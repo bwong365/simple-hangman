@@ -14,6 +14,7 @@ class Hangman {
         scanner = new Scanner(System.in);
     }
 
+    // Starts the game
     void start() throws InterruptedException {
         initialize();
         isOn = true;
@@ -31,6 +32,8 @@ class Hangman {
             // Tell user if the guess was good or bad
             success = checkGuess(guess);
             Thread.sleep(1500);
+
+            // If the guess was bad, tick closer to impending doom
             if (!success) {
                 remainingGuesses--;
             }
@@ -44,6 +47,7 @@ class Hangman {
         }
     }
 
+    // Reset game variables and preview the word length
     private void initialize() {
         displayWelcomeMessage();
 
@@ -53,6 +57,7 @@ class Hangman {
         System.out.println("Here's your word! " + revealWord());
     }
 
+    // Displays a welcome message
     private void displayWelcomeMessage() {
         System.out.println("*********************************************");
         System.out.println("*  Welcome to My Simple Game of Hangman!!!  *");
@@ -60,10 +65,13 @@ class Hangman {
         System.out.println("*********************************************");
     }
 
+    // Display the word, replacing letters with dashes, unless guessed.
     private String revealWord() {
-        // Display the word, replacing letters with dashes, unless guessed.
-        System.out.println();
         StringBuilder sb = new StringBuilder();
+
+        System.out.println();
+
+        // Iterate through the word, checking whether letters are found in the guessed set
         for (int i = 0; i < word.length(); i++) {
             if (guessed.contains(word.charAt(i))) {
                 sb.append(word.charAt(i));
@@ -71,24 +79,32 @@ class Hangman {
                 sb.append('-');
             }
         }
+
         return sb.toString();
     }
 
+    // Prompts a guess and ensures it has not been already guessed
     private char getUniqueGuess() {
-        System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess " : " guesses ") + "remaining");
         char letter;
+
+        // Grammar enforcement
+        System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess " : " guesses ") + "remaining");
+
+        // Continue prompting while letter has already been guessed
         do {
             letter = getALetter();
             if (guessed.contains(letter)) {
                 System.out.println("You've already guessed that!");
             }
         } while (guessed.contains(letter));
+
         return letter;
     }
 
+    // Gets a letter from the user
     private char getALetter() {
         String rawGuess = "";
-        // make sure they enter just a letter
+        // Ensure the input is a letter
         while (rawGuess.length() != 1 || !Character.isLetter(rawGuess.charAt(0))) {
             System.out.print("Guess one letter at a time: ");
             rawGuess = scanner.nextLine();
@@ -97,6 +113,7 @@ class Hangman {
         return rawGuess.toLowerCase().charAt(0);
     }
 
+    // Verify whether the guess is successful
     private boolean checkGuess(char guess) {
         if (word.contains(Character.toString(guess))) {
             System.out.println("Nice Work!");
@@ -107,16 +124,23 @@ class Hangman {
         }
     }
 
+    // Checks for a win/loss
     private void checkWinCondition(String revealedWord) {
+        // if the revealed word is the same as the word, we win
         if (word.equals(revealedWord)) {
             System.out.println("You win!");
+
+        // if the revealed word is incomplete, check remaining guesses for loss
         } else if (remainingGuesses <= 0) {
             System.out.println("Game Over...");
             System.out.println("The word was " + word);
         } else {
+
+        // If neither, let the game continue
             return;
         }
 
+        // Prompts after a win or loss condition
         System.out.println("Would you like to play again?");
         char playAgain = getYesOrNo();
         if (playAgain == 'y') {
@@ -126,6 +150,7 @@ class Hangman {
         }
     }
 
+    // Ensures the letter is a 'y' or 'n'
     private char getYesOrNo() {
         String rawGuess = "";
 
@@ -136,6 +161,7 @@ class Hangman {
         return rawGuess.toLowerCase().charAt(0);
     }
 
+    // Verifies the letter is [YyNn]
     private boolean isValidYN(char letter) {
         switch (letter) {
             case ('y'):
