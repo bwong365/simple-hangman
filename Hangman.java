@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Scanner;
 
-class Hangman {
+public class Hangman {
     private Dictionary dictionary;
     private Scanner scanner;
     private String word;
@@ -11,13 +11,13 @@ class Hangman {
     private Boolean isOn;
     private int remainingGuesses;
 
-    Hangman(Dictionary dictionary) {
+    public Hangman(Dictionary dictionary) {
         this.dictionary = dictionary;
         scanner = new Scanner(System.in);
     }
 
     // Starts the game
-    void start() throws InterruptedException {
+    public void start() {
         initialize();
         isOn = true;
 
@@ -33,7 +33,12 @@ class Hangman {
 
             // Tell user if the guess was good or bad
             success = checkGuess(guess);
-            Thread.sleep(1500);
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                System.out.println("Something went wrong...");
+            }
+
 
             // If the guess was bad, tick closer to impending doom
             if (!success) {
