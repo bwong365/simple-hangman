@@ -17,6 +17,6 @@ class Dictionary {
     // Pick a random word
     String random() {
         int line = this.random.nextInt(words.size());
-        return words.get(line);
+        return words.get(line).toLowerCase();
     }
 }

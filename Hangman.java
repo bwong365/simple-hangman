@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -53,7 +55,7 @@ class Hangman {
 
         word = dictionary.random();
         guessed = new HashSet<>();
-        remainingGuesses = 7;
+        remainingGuesses = 10;
         System.out.println("Here's your word! " + revealWord());
     }
 
@@ -86,9 +88,22 @@ class Hangman {
     // Prompts a guess and ensures it has not been already guessed
     private char getUniqueGuess() {
         char letter;
+        ArrayList<Character> alphabetizedGuesses;
 
-        // Grammar enforcement
+
+        // Show remaining guesses and guessed letters
         System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess " : " guesses ") + "remaining");
+        System.out.print("Letters guessed: ");
+
+        // Show guessed letters in alphabetical order
+        alphabetizedGuesses = new ArrayList<>(guessed);
+        Collections.sort(alphabetizedGuesses);
+
+        for (char guess : alphabetizedGuesses) {
+            System.out.print(guess + " ");
+        }
+        System.out.println();
+
 
         // Continue prompting while letter has already been guessed
         do {
@@ -130,13 +145,13 @@ class Hangman {
         if (word.equals(revealedWord)) {
             System.out.println("You win!");
 
-        // if the revealed word is incomplete, check remaining guesses for loss
+            // if the revealed word is incomplete, check remaining guesses for loss
         } else if (remainingGuesses <= 0) {
             System.out.println("Game Over...");
             System.out.println("The word was " + word);
         } else {
 
-        // If neither, let the game continue
+            // If neither, let the game continue
             return;
         }
 
