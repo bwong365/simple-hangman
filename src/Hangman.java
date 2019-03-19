@@ -1,19 +1,18 @@
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Scanner;
 
 public class Hangman {
     private Dictionary dictionary;
-    private Scanner scanner;
+    private UserInterface ui;
+    
     private String word;
-    private HashSet<Character> guessed;
-    private Boolean isOn;
+    private HashSet<Character> guessedLetters;
     private int remainingGuesses;
+    private Boolean isOn;
+    
 
-    public Hangman(Dictionary dictionary) {
+    public Hangman(Dictionary dictionary, UserInterface ui) {
         this.dictionary = dictionary;
-        scanner = new Scanner(System.in);
+        this.ui = ui;
     }
 
     // Starts the game
@@ -25,29 +24,23 @@ public class Hangman {
         while (isOn) {
             String revealedWord;
             char guess;
-            boolean success;
+            boolean wasSuccessful;
 
             // Prompt a guess and add it to the set
-            guess = getUniqueGuess();
-            guessed.add(guess);
+            guess = ui.promptGuess(remainingGuesses, guessedLetters);
+            guessedLetters.add(guess);
 
-            // Tell user if the guess was good or bad
-            success = checkGuess(guess);
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                System.out.println("Something went wrong...");
-            }
-
+            // check and inform user if guess was good or bad
+            wasSuccessful = checkGuess(guess);
 
             // If the guess was bad, tick closer to impending doom
-            if (!success) {
+            if (!wasSuccessful) {
                 remainingGuesses--;
             }
 
             // Display the revealed letters so far
-            revealedWord = revealWord();
-            System.out.println("Word so far: " + revealedWord);
+            revealedWord = generateRevealedWord();
+            ui.revealWord(revealedWord);
 
             // Check the revealed word for the win condition
             checkWinCondition(revealedWord);
@@ -56,31 +49,23 @@ public class Hangman {
 
     // Reset game variables and preview the word length
     private void initialize() {
-        displayWelcomeMessage();
+        ui.displayWelcome();
 
         word = dictionary.random();
-        guessed = new HashSet<>();
+        guessedLetters = new HashSet<>();
         remainingGuesses = 10;
-        System.out.println("Here's your word! " + revealWord());
+        ui.revealWord(generateRevealedWord());
     }
 
-    // Displays a welcome message
-    private void displayWelcomeMessage() {
-        System.out.println("*********************************************");
-        System.out.println("*  Welcome to My Simple Game of Hangman!!!  *");
-        System.out.println("*                by Ben Wong                *");
-        System.out.println("*********************************************");
-    }
-
-    // Display the word, replacing letters with dashes, unless guessed.
-    private String revealWord() {
-        StringBuilder sb = new StringBuilder();
+    // Generates the revealed word, replacing letters with dashes, unless the letters have been guessed.
+    private String generateRevealedWord() {
+        var sb = new StringBuilder();
 
         System.out.println();
 
-        // Iterate through the word, checking whether letters are found in the guessed set
+        // Iterate through the word, checking whether letters are found in the guessedLetters set
         for (int i = 0; i < word.length(); i++) {
-            if (guessed.contains(word.charAt(i))) {
+            if (guessedLetters.contains(word.charAt(i))) {
                 sb.append(word.charAt(i));
             } else {
                 sb.append('-');
@@ -90,106 +75,37 @@ public class Hangman {
         return sb.toString();
     }
 
-    // Prompts a guess and ensures it has not been already guessed
-    private char getUniqueGuess() {
-        char letter;
-        ArrayList<Character> alphabetizedGuesses;
-
-        // Show remaining guesses and guessed letters
-        System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess remaining!" : " guesses remaining"));
-        System.out.print("Letters guessed: ");
-
-        // Show guessed letters in alphabetical order
-        alphabetizedGuesses = new ArrayList<>(guessed);
-        Collections.sort(alphabetizedGuesses);
-        for (char guess : alphabetizedGuesses) {
-            System.out.print(guess + " ");
-        }
-        System.out.println();
-
-        // Continue prompting while letter has already been guessed
-        do {
-            letter = getALetter();
-            if (guessed.contains(letter)) {
-                System.out.println("You've already guessed that!");
-            }
-        } while (guessed.contains(letter));
-
-        return letter;
-    }
-
-    // Gets a letter from the user
-    private char getALetter() {
-        String rawGuess = "";
-
-        // Ensure the input is a letter
-        while (rawGuess.length() != 1 || !Character.isLetter(rawGuess.charAt(0))) {
-            System.out.print("Guess one letter at a time: ");
-            rawGuess = scanner.nextLine();
-        }
-
-        return rawGuess.toLowerCase().charAt(0);
-    }
-
     // Verify whether the guess is successful
     private boolean checkGuess(char guess) {
-        if (word.contains(Character.toString(guess))) {
-            System.out.println("Nice Work!");
-            return true;
-        } else {
-            System.out.println("*sadly*: womp womp...");
-            return false;
-        }
+        boolean wasSuccessful = word.contains(Character.toString(guess));
+        ui.showSuccess(wasSuccessful);
+        return wasSuccessful;
     }
 
     // Checks for a win/loss
     private void checkWinCondition(String revealedWord) {
+        boolean wasVictorious;
+        boolean playAgain;
+
         // if the revealed word is the same as the word, we win
         if (word.equals(revealedWord)) {
-            System.out.println("You win!");
+            wasVictorious = true;
 
         // if the revealed word is incomplete, check remaining guesses for loss
         } else if (remainingGuesses <= 0) {
-            System.out.println("Game Over...");
-            System.out.println("The word was " + word);
+            wasVictorious = false;
 
         // If neither, let the game continue
         } else {
             return;
         }
 
-        // Prompts after a win or loss condition
-        System.out.println("Would you like to play again?");
-        char playAgain = getYesOrNo();
-        if (playAgain == 'y') {
+        playAgain = ui.playAgain(wasVictorious, word);
+        if (playAgain) {
             initialize();
         } else {
             isOn = false;
         }
-    }
 
-    // Ensures the letter is a 'y' or 'n'
-    private char getYesOrNo() {
-        String rawGuess = "";
-
-        while (rawGuess.length() != 1 || !isValidYN(rawGuess.charAt(0))) {
-            System.out.print("Enter y/n: ");
-            rawGuess = scanner.nextLine();
-        }
-
-        return rawGuess.toLowerCase().charAt(0);
-    }
-
-    // Verifies the letter is [YyNn]
-    private boolean isValidYN(char letter) {
-        switch (letter) {
-            case ('y'):
-            case ('n'):
-            case ('Y'):
-            case ('N'):
-                return true;
-            default:
-                return false;
-        }
     }
 }

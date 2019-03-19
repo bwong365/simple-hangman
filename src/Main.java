@@ -3,6 +3,8 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args)  {
         Dictionary dictionary;
+        var ui = new TextInterface();
+
         try {
              dictionary = new Dictionary();
         } catch (IOException e) {
@@ -10,7 +12,7 @@ public class Main {
             return;
         }
 
-        Hangman game = new Hangman(dictionary);
+        var game = new Hangman(dictionary, ui);
         game.start();
     }
 }

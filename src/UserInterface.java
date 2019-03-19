@@ -2,12 +2,8 @@ import java.util.HashSet;
 
 public interface UserInterface {
     public void displayWelcome();
-
-    public char getUniqueGuess(HashSet<Character> guessed);
-
     public void revealWord(String revealedWord);
-
-    public void displayAlphabetizedGuesses();
-
-
+    public char promptGuess(int remainingGuesses, HashSet<Character> guessedLetters);
+    public void showSuccess(boolean wasSuccessful);
+    public boolean playAgain(boolean wasVictorious, String word);
 }
