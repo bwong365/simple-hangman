@@ -1,2 +1,5 @@
 *.class
-*.txt
+out/
+*.iml
+*.ipr
+*.iws
