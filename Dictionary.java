@@ -14,7 +14,7 @@ class Dictionary {
         random = new Random();
     }
 
-    // Pick a random word
+    // Returns a random word from the wordlist
     String random() {
         int line = this.random.nextInt(words.size());
         return words.get(line).toLowerCase();
