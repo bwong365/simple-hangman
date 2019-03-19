@@ -7,7 +7,7 @@ public class Main {
         var filePath = "dictionary.txt";
 
         try {
-             dictionary = new Dictionary(filePath);
+            dictionary = new Dictionary(filePath);
         } catch (IOException e) {
             System.out.println("Wordlist could not be loaded/file not found...");
             return;
