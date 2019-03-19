@@ -40,10 +40,11 @@ public class Hangman {
 
             // Display the revealed letters so far
             revealedWord = generateRevealedWord();
-            ui.revealWord(revealedWord);
 
             // Check the revealed word for the win condition
-            checkWinCondition(revealedWord);
+            if (!checkWinCondition(revealedWord)) {
+                ui.revealWord(revealedWord);
+            }
         }
     }
 
@@ -83,7 +84,7 @@ public class Hangman {
     }
 
     // Checks for a win/loss
-    private void checkWinCondition(String revealedWord) {
+    private boolean checkWinCondition(String revealedWord) {
         boolean wasVictorious;
         boolean playAgain;
 
@@ -97,7 +98,7 @@ public class Hangman {
 
         // If neither, let the game continue
         } else {
-            return;
+            return false;
         }
 
         playAgain = ui.playAgain(wasVictorious, word);
@@ -107,5 +108,6 @@ public class Hangman {
             isOn = false;
         }
 
+        return true;
     }
 }

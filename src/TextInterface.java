@@ -19,6 +19,7 @@ public class TextInterface implements UserInterface {
         System.out.println();
     }
 
+    // Displays the word, with un-guessed letters replaced as dashes
     @Override
     public void revealWord(String revealedWord) {
         System.out.print("The word so far: ");
@@ -32,6 +33,7 @@ public class TextInterface implements UserInterface {
         return getUniqueGuess(guessedLetters);
     }
 
+    // Tells the user whether a guess was successful
     @Override
     public void showSuccess(boolean wasSuccessful) {
         System.out.println((wasSuccessful) ? "Nice work!" : "*sadly*: womp womp...");
@@ -43,6 +45,7 @@ public class TextInterface implements UserInterface {
         }
     }
 
+    // Displays game over dialogue and asks user if they would like to play again
     @Override
     public boolean playAgain(boolean wasVictorious, String word) {
         displayGameOver(wasVictorious, word);
@@ -56,10 +59,10 @@ public class TextInterface implements UserInterface {
     }
 
     private void showRemainingGuesses(int remainingGuesses) {
-        // Show remaining guesses
         System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess remaining!" : " guesses remaining"));
     }
 
+    // Displays a sorted list of the guessed letters
     private void showAlphabetizedGuesses(HashSet<Character> guessedLetters) {
         System.out.print("Letters guessed: ");
         var alphabetizedGuesses = new ArrayList<>(guessedLetters);
@@ -71,6 +74,7 @@ public class TextInterface implements UserInterface {
         System.out.println();
     }
 
+    // Ensures a guess is valid and unique
     private char getUniqueGuess(HashSet<Character> guessedLetters) {
         char letter;
 
@@ -100,7 +104,7 @@ public class TextInterface implements UserInterface {
 
     private void displayGameOver(boolean wasVictorious, String word) {
         System.out.println(wasVictorious ? "You Win!" : "Game Over...");
-        System.out.println("The word was " + word);
+        System.out.println("The word was: " + word);
         System.out.println();
         System.out.print("Would you like to play again? ");
     }
