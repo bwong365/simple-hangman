@@ -90,7 +90,6 @@ class Hangman {
         char letter;
         ArrayList<Character> alphabetizedGuesses;
 
-
         // Show remaining guesses and guessed letters
         System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess remaining!" : " guesses remaining"));
         System.out.print("Letters guessed: ");
@@ -98,12 +97,10 @@ class Hangman {
         // Show guessed letters in alphabetical order
         alphabetizedGuesses = new ArrayList<>(guessed);
         Collections.sort(alphabetizedGuesses);
-
         for (char guess : alphabetizedGuesses) {
             System.out.print(guess + " ");
         }
         System.out.println();
-
 
         // Continue prompting while letter has already been guessed
         do {
@@ -119,6 +116,7 @@ class Hangman {
     // Gets a letter from the user
     private char getALetter() {
         String rawGuess = "";
+
         // Ensure the input is a letter
         while (rawGuess.length() != 1 || !Character.isLetter(rawGuess.charAt(0))) {
             System.out.print("Guess one letter at a time: ");
@@ -145,13 +143,13 @@ class Hangman {
         if (word.equals(revealedWord)) {
             System.out.println("You win!");
 
-            // if the revealed word is incomplete, check remaining guesses for loss
+        // if the revealed word is incomplete, check remaining guesses for loss
         } else if (remainingGuesses <= 0) {
             System.out.println("Game Over...");
             System.out.println("The word was " + word);
-        } else {
 
-            // If neither, let the game continue
+        // If neither, let the game continue
+        } else {
             return;
         }
 
@@ -173,6 +171,7 @@ class Hangman {
             System.out.print("Enter y/n: ");
             rawGuess = scanner.nextLine();
         }
+
         return rawGuess.toLowerCase().charAt(0);
     }
 
