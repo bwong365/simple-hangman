@@ -92,7 +92,7 @@ class Hangman {
 
 
         // Show remaining guesses and guessed letters
-        System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess " : " guesses ") + "remaining");
+        System.out.println(remainingGuesses + ((remainingGuesses == 1) ? " guess remaining!" : " guesses remaining"));
         System.out.print("Letters guessed: ");
 
         // Show guessed letters in alphabetical order
