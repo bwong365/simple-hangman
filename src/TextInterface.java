@@ -11,7 +11,7 @@ public class TextInterface implements UserInterface {
     }
 
     @Override
-    public void displayWelcome() {
+    public void initialize() {
         System.out.println("*********************************************");
         System.out.println("*  Welcome to My Simple Game of Hangman!!!  *");
         System.out.println("*                by Ben Wong                *");

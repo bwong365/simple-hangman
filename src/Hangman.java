@@ -50,11 +50,11 @@ public class Hangman {
 
     // Reset game variables and preview the word length
     private void initialize() {
-        ui.displayWelcome();
-
         word = dictionary.random();
         guessedLetters = new HashSet<>();
         remainingGuesses = 10;
+
+        ui.initialize();
         ui.revealWord(generateRevealedWord());
     }
 

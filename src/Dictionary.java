@@ -9,9 +9,9 @@ public class Dictionary {
     private Random random;
 
     // Load a list of words from a file
-    public Dictionary() throws IOException {
+    public Dictionary(String filePath) throws IOException {
         System.out.println("Loading wordlist...");
-        words = Files.readAllLines(Paths.get("dictionary.txt"));
+        words = Files.readAllLines(Paths.get(filePath));
 
         random = new Random();
     }
