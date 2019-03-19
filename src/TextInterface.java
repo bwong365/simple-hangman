@@ -91,7 +91,7 @@ public class TextInterface implements UserInterface {
 
     // Gets a letter from the user
     private char getALetter() {
-        String rawGuess = "";
+        var rawGuess = "";
 
         // Ensure the input is a letter
         while (rawGuess.length() != 1 || !Character.isLetter(rawGuess.charAt(0))) {
@@ -111,7 +111,7 @@ public class TextInterface implements UserInterface {
 
     // Ensures the letter is a 'y' or 'n'
     private char getYesOrNo() {
-        String rawGuess = "";
+        var rawGuess = "";
 
         while (rawGuess.length() != 1 || !isValidYN(rawGuess.charAt(0))) {
             System.out.print("Enter y/n: ");
